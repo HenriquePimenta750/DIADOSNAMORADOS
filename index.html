@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pote com 365 Motivos</title>
   <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Parisienne&display=swap" rel="stylesheet">
   <style>
     /* Reset básico e fonte */
     body, html {
@@ -32,7 +33,7 @@
     #tituloContainer {
       text-align: center;
       color: #ff3366;
-      font-size: 2.5rem;
+      font-size: 5rem;
       font-weight: bold;
       user-select: none;
       font-family: 'Parisienne', cursive; /* Fonte adicionada aqui */
@@ -56,6 +57,7 @@
       line-height: 1.4;
       padding: 0 10px;
       user-select: none;
+      font-family: "Montserrat", sans-serif;
     }
 
     /* Container do pote */
@@ -84,19 +86,19 @@
    
     #fraseAberta {
       position: absolute;
-      top: 10px;
+      top: 50%;
       left: 50%;
       transform: translateX(-50%);
+      z-index: 999;
       background: #ff3366;
       color: white;
-      padding: 10px 15px;
+      padding: 15px 15px;
       border-radius: 6px;
       font-size: 1.1rem;
       min-width: 250px;
       max-width: 90%;
       text-align: center;
       display: none;
-      z-index: 10;
       word-wrap: break-word;
       user-select: text;
     }
@@ -214,14 +216,14 @@
     /* Responsividade básica */
     @media (max-width: 600px) {
       #tituloContainer {
-        font-size: 1.5rem;
+        font-size: 3rem;
       }
       #textoContainer {
         font-size: 0.9rem;
       }
       #botoesControles button {
         font-size: 0.9rem;
-        padding: 8px 0;
+        padding: 10px 10px;
       }
     }
   </style>
@@ -229,7 +231,7 @@
 <body>
   <div id="main-container">
     <div id="tituloContainer">
-      365 Motivos para Amar Você
+      Feliz dia dos namorados!!
     </div>
 
     <div id="imagemContainer">
@@ -238,15 +240,12 @@
     </div>
 
     <div id="textoContainer">
-  <div style="text-align: center; font-size: 2rem; color: #ff3366; font-weight: bold;">
-    FELIZ DIA DOS NAMORADOS!!
-  </div>
   <br>
    &nbsp;&nbsp;&nbsp;&nbsp;Eu quero que você saiba que eu te amo mais que infinito, sou feliz cada segundo do seu lado.
    <br>
    &nbsp;&nbsp;&nbsp;&nbsp;Eu fiquei em dúvida do que dar de presente, já que você é uma pessoa bemmm chatinha e indecisa. Por isso tentei ser criativo e criei esse pote, dentro dele tem 365 motivos do porquê eu te amo.
   <br>
-   &nbsp;&nbsp;&nbsp;&nbsp;Cada motivo está separado em um desses quadradinhos, que você pode ir tirando(de preferência 1 por dia kkk).
+   &nbsp;&nbsp;&nbsp;&nbsp;Cada motivo está separado em um desses quadradinhos, que você pode ir tirando (de preferência 1 por dia kkk).
 </div>
 
     <div id="poteContainer">
