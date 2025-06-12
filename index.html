@@ -356,7 +356,7 @@
 
       let papel = Bodies.rectangle(x, y, widthVar, heightVar, {
         restitution: 0.1,
-        friction: 0.8,
+        friction: 2,
         angle: angle,
         render: {
           fillStyle: '#ffffff', // branco
@@ -388,12 +388,12 @@
 
   let papel = Bodies.rectangle(x, y, widthVar, heightVar, {
     restitution: 0.1,
-    friction: 0.5,  // um pouco mais de atrito
+    friction: 1,  // um pouco mais de atrito
     angle: angle,
     render: {
-      fillStyle: '#ffffff',
-      strokeStyle: '#ff3366',
-      lineWidth: 2
+      fillStyle: '#afafa',
+      strokeStyle: '#c9c9c9',
+      lineWidth: 1
     },
     label: `papel-${indiceFrase}`,
     customIndex: indiceFrase
