@@ -118,10 +118,13 @@
     }
 
     /* Botões, agora dentro do main, abaixo do pote */
-  #botoesControles button {
-  flex: none;        /* não expande para preencher */
-  width: auto;       /* largura mínima necessária */
-  padding: 20px 20px;/* ajuste o padding a gosto */
+  #botoesControles {
+  display: flex;
+  flex-direction: column; /* empilhar verticalmente */
+  gap: 10px; /* espaço entre os botões */
+  width: 100%; /* para ajustar o tamanho */
+  max-width: 300px; /* opcional, para não ficar gigante */
+  margin: 0 auto; /* centralizar horizontalmente */
 }
     #botoesControles button {
       flex: 1;
@@ -142,6 +145,14 @@
       background: #e0637c;
     }
 
+    #btnLimpar {
+      background: #ff708d;
+    }
+    #btnLimpar:hover {
+      background: #e0637c;
+    }
+
+
     /* Modal Styles */
     #modalFundo {
       display: none;
@@ -149,7 +160,7 @@
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.5);
       backdrop-filter: blur(5px);
-      z-index: 100;
+      z-index: 1000;
       justify-content: center;
       align-items: center;
     }
@@ -257,7 +268,8 @@
     </div>
 
     <div id="botoesControles">
-      <button id="btnMostrar">Ver Frases Sorteadas</button>
+      <button id="btnMostrar">Ver Frases</button>
+      <button id="btnLimpar">Resetar</button>
     </div>
   </div>
 
@@ -265,7 +277,7 @@
   <div id="modalFundo">
     <div id="modalConteudo">
       <button id="modalFechar">&times;</button>
-      <h2>Frases Sorteadas</h2>
+      <h2>Frases</h2>
       <div id="listaFrases"></div>
     </div>
   </div>
@@ -275,15 +287,16 @@
     const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
 
     const frases = [
-      "Eu amo você porque você sempre me faz sorrir.",
-      "Eu amo você porque o seu abraço me traz paz.",
-      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
-      "Eu amo você porque sua risada é a música mais doce para mim.",
-      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
-      "Eu amo você porque você sempre me faz sorrir.",
-      "Eu amo você porque o seu abraço me traz paz.",
-      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
-      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque seu sorriso ilumina meu dia.",
+"Eu amo você porque você me apoia em tudo.",
+"Eu amo você porque me faz rir mesmo nos piores momentos.",
+"Eu amo você porque seus abraços são meu porto seguro.",
+"Eu amo você porque acredita em mim.",
+"Eu amo você porque me inspira a ser uma pessoa melhor.",
+
+
+
+
       // ... até a frase 365
       
     ];
@@ -459,8 +472,8 @@ for (let i = 0; i < quantidadeInicial; i++) {
 
     // Botões limpar progresso e mostrar frases
     document.getElementById('btnLimpar').addEventListener('click', () => {
-      if(confirm('Deseja realmente limpar o progresso? Isso não pode ser desfeito.')) {
-        localStorage.removeItem('frasesSorteadas');
+    if(confirm('Deseja realmente resetar e devolver todas as frases para o pote? Isso não pode ser desfeito.')) {
+     localStorage.removeItem('frasesSorteadas');
         location.reload();
       }
     });
@@ -471,7 +484,7 @@ for (let i = 0; i < quantidadeInicial; i++) {
 
    document.getElementById('btnMostrar').addEventListener('click', () => {
   if(frasesSorteadas.length === 0) {
-    listaFrases.innerHTML = '<div>Nenhuma frase sorteada ainda.</div>';
+    listaFrases.innerHTML = '<div>Nenhuma frase tirada do pote ainda.</div>';
   } else {
     let html = '';
     frasesSorteadas.forEach((indice, i) => {
