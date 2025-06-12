@@ -5,67 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pote com 365 Motivos</title>
   <style>
-    /* Reset básico */
-    * {
-      box-sizing: border-box;
-    }
+    /* Reset básico e fonte */
     body, html {
       margin: 0; padding: 0;
-      background: #fff0f5;
       font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      background: #fff0f5;
       min-height: 100vh;
-      color: #333;
-    }
-    section {
-      width: 90%;
-      max-width: 600px;
-      margin: 20px 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      padding: 0 10px;
+      padding: 20px;
+      box-sizing: border-box;
     }
-    header {
-      font-size: 2.2rem;
-      font-weight: bold;
-      text-align: center;
-      color: #ff3366;
-      user-select: none;
-    }
-    #imagem img {
+    /* Container principal centralizado e responsivo */
+    #main-container {
+      max-width: 540px;
       width: 100%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      user-select: none;
-    }
-    #texto p {
-      font-size: 1.125rem;
-      line-height: 1.5;
-      text-align: center;
-      user-select: none;
-      margin: 0;
-    }
-    #canvas-container {
-      position: relative;
-      width: 100%;
-      max-width: 500px;
-      aspect-ratio: 5 / 7; /* Mantém proporção 500x700 */
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 15px;
+    }
+
+    /* Título */
+    #tituloContainer {
+      text-align: center;
+      color: #ff3366;
+      font-size: 2rem;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    /* Imagem - centralizada e responsiva */
+    #imagemContainer img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+
+    /* Texto descritivo */
+    #textoContainer {
+      color: #333;
+      font-size: 1rem;
+      text-align: center;
+      line-height: 1.4;
+      padding: 0 10px;
+      user-select: none;
+    }
+
+    /* Container do pote */
+    #poteContainer {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 5 / 7; /* 500 x 700 */
+      user-select: none;
+    }
+
+    /* Canvas e divs dentro do pote */
+    #canvas-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
     }
     canvas {
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       background: #fff;
-      width: 100%;
-      height: 100%;
-      user-select: none;
+      width: 100% !important;
+      height: 100% !important;
       display: block;
     }
     #fraseAberta {
@@ -77,19 +87,20 @@
       color: white;
       padding: 10px 15px;
       border-radius: 6px;
-      font-size: 1rem;
-      min-width: 200px;
+      font-size: 1.1rem;
+      min-width: 250px;
+      max-width: 90%;
       text-align: center;
       display: none;
       z-index: 10;
-      user-select: none;
       word-wrap: break-word;
+      user-select: text;
     }
     #poteVisual {
       position: absolute;
       width: 68%; /* 340/500 */
       height: 88.5%; /* 620/700 */
-      top: 6%;
+      top: 5.7%; /* 40/700 */
       left: 50%;
       transform: translateX(-50%);
       border: 6px solid #ff708d;
@@ -97,167 +108,374 @@
       border-radius: 0 0 30px 30px;
       z-index: 1;
       pointer-events: none;
-      user-select: none;
-    }
-    #botoes-container {
-      margin-top: 10px;
-      display: flex;
-      gap: 15px;
-      user-select: none;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    button {
-      background-color: #ff3366;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      min-width: 140px;
-      user-select: none;
-    }
-    button:hover {
-      background-color: #e0245e;
+      box-sizing: border-box;
     }
 
-    /* Modal */
+    /* Botões, agora dentro do main, abaixo do pote */
+    #botoesControles {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+      max-width: 500px;
+      user-select: none;
+    }
+    #botoesControles button {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    #btnLimpar {
+      background: #ff3366;
+    }
+    #btnLimpar:hover {
+      background: #e52a5b;
+    }
+    #btnMostrar {
+      background: #ff708d;
+    }
+    #btnMostrar:hover {
+      background: #e0637c;
+    }
+
+    /* Modal Styles */
     #modalFundo {
+      display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      z-index: 100;
       justify-content: center;
       align-items: center;
-      z-index: 20;
-      user-select: none;
-      padding: 10px;
     }
     #modalConteudo {
-      background: white;
-      border-radius: 12px;
-      padding: 20px 30px;
-      max-width: 450px;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-      text-align: center;
-      position: relative;
-    }
-    #modalConteudo h2 {
-      margin-top: 0;
-      color: #ff3366;
-      user-select: none;
-    }
-    #modalConteudo ul {
-      list-style: none;
-      padding-left: 0;
-      max-height: 60vh;
-      overflow-y: auto;
-      text-align: left;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      user-select: none;
-    }
-    #modalConteudo li {
-      margin-bottom: 8px;
-      font-size: 1rem;
-      color: #333;
-    }
+  background: white;
+  padding: 20px;
+  width: 90vw;
+  max-width: 600px;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-size: 16px;
+  color: #333;
+  position: relative;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  #modalConteudo {
+    width: 95vw;
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+#listaFrases {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
     #modalFechar {
-  margin-top: 20px;
-  background-color: #ff3366;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-#modalFechar:hover {
-  background-color: #e0245e;
-}
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s;
+    }
     #modalFechar:hover {
-      color: #e0245e;
+      color: #ff3366;
     }
 
-    /* Media Queries para telas muito pequenas */
-    @media (max-width: 350px) {
-      header {
+    /* Responsividade básica */
+    @media (max-width: 600px) {
+      #tituloContainer {
         font-size: 1.5rem;
       }
-      #texto p {
-        font-size: 1rem;
-      }
-      button {
-        min-width: 120px;
-        padding: 8px 14px;
+      #textoContainer {
         font-size: 0.9rem;
       }
-      #fraseAberta {
-        min-width: 150px;
+      #botoesControles button {
         font-size: 0.9rem;
-        padding: 8px 12px;
+        padding: 8px 0;
       }
     }
   </style>
 </head>
 <body>
-  <section id="titulo">
-    <header>365 Motivos para Te Amar</header>
-  </section>
-
-  <section id="imagem">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" alt="Imagem Romântica" />
-  </section>
-
-  <section id="texto">
-    <p>Este pote contém 365 motivos para te amar, um para cada dia do ano. Clique nos papeizinhos dentro do pote para descobrir um novo motivo!</p>
-  </section>
-
-  <section id="pote">
-    <div id="canvas-container">
-      <div id="fraseAberta"></div>
-      <div id="poteVisual"></div>
-      <canvas id="world" width="500" height="700"></canvas>
+  <div id="main-container">
+    <div id="tituloContainer">
+      365 Motivos para Amar Você
     </div>
-    <div id="botoes-container">
+
+    <div id="imagemContainer">
+      <!-- Substitua pelo caminho da imagem desejada -->
+      <img src="https://images.unsplash.com/photo-1517260739332-09f4bb22d2e4?auto=format&fit=crop&w=500&q=80" alt="Imagem romântica do pote" />
+    </div>
+
+    <div id="textoContainer">
+      Clique nos papeizinhos para descobrir motivos lindos para amar. Cada papel é um motivo especial guardado neste pote mágico.
+    </div>
+
+    <div id="poteContainer">
+      <div id="canvas-container">
+        <div id="fraseAberta"></div>
+        <div id="poteVisual"></div>
+        <canvas id="world"></canvas>
+      </div>
+    </div>
+
+    <div id="botoesControles">
       <button id="btnLimpar">Limpar Progresso</button>
-      <button id="btnMostrar">Mostrar Frases Sorteadas</button>
+      <button id="btnMostrar">Ver Frases Sorteadas</button>
     </div>
-  </section>
-
-<div id="modalFundo">
-  <div id="modalConteudo">
-    <h2>Frases Sorteadas</h2>
-    <ul id="listaFrases"></ul>
-    <button id="modalFechar">Fechar</button>
   </div>
-</div>
+
+  <!-- Modal -->
+  <div id="modalFundo">
+    <div id="modalConteudo">
+      <button id="modalFechar">&times;</button>
+      <h2>Frases Sorteadas</h2>
+      <pre id="listaFrases"></pre>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
   <script>
     const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
 
     const frases = [
-  "Eu amo você porque você sempre me faz sorrir.",
-  "Eu amo você porque o seu abraço me traz paz.",
-  "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
-  "Eu amo você porque sua risada é a música mais doce para mim.",
-  "Eu amo você porque você me inspira a ser uma pessoa melhor.",
-  
-  // ... até a frase 365
-  "Motivo #365: Eu amo você porque você existe na minha vida."
-];
-
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu a você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu a você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu a você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu a você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      "Eu amo você porque sua risada é a música mais doce para mim.",
+      "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+      "Eu amo você porque você sempre me faz sorrir.",
+      "Eu amo você porque o seu abraço me traz paz.",
+      "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+      // ... até a frase 365
+      
+    ];
 
     const engine = Engine.create();
     const world = engine.world;
 
-    // Ajustar dimensões base para canvas - fixa para a engine, mas CSS responsivo escala visualmente
+    // Ajustar largura e altura do canvas baseado no tamanho do poteContainer
+    const poteContainer = document.getElementById('poteContainer');
     const width = 500;
     const height = 700;
 
@@ -276,17 +494,17 @@
     Runner.run(runner, engine);
 
     // Estrutura física do pote
-    const poteEsquerda = Bodies.rectangle(width/2 - 170, height/2 + 50, 30, 700, {
+    const poteEsquerda = Bodies.rectangle(width/2 - 150, height/2 + 10, 2, 700, {
       isStatic: true,
       render: { visible: false }
     });
 
-    const poteDireita = Bodies.rectangle(width/2 + 170, height/2 + 50, 30, 700, {
+    const poteDireita = Bodies.rectangle(width/2 + 150, height/2 + 10, 2, 700, {
       isStatic: true,
       render: { visible: false }
     });
 
-    const poteFundo = Bodies.rectangle(width/2, height - 40, 320, 50, {
+    const poteFundo = Bodies.rectangle(width/2, height - 30, 350, 60, {
       isStatic: true,
       render: { visible: false }
     });
@@ -303,64 +521,86 @@
     const papelHeightBase = 25;
     const minX = width/2 - 140;
     const maxX = width/2 + 140;
-    const minY = height - 250;
-    const maxY = height - 100;
+    const minY = height - 150;
+    const maxY = height - 80;
 
     const papeis = [];
-    let indicesRestantes = [];
-    let indicesUsados = [];
+    let indicesRestantes = Array.from(Array(frases.length).keys());
 
-    // Carregar progresso do localStorage
-    const salvoIndicesRestantes = localStorage.getItem('indicesRestantes');
-    const salvoIndicesUsados = localStorage.getItem('indicesUsados');
+    // LocalStorage de frases sorteadas
+    let frasesSorteadas = [];
 
-    if (salvoIndicesRestantes && salvoIndicesUsados) {
-      indicesRestantes = JSON.parse(salvoIndicesRestantes);
-      indicesUsados = JSON.parse(salvoIndicesUsados);
-    } else {
-      indicesRestantes = Array.from(Array(frases.length).keys());
-      indicesUsados = [];
-    }
-
+    // Função para criar papel com tamanho randomizado (variação ±20%)
     function criarPapel(indiceFrase) {
       const x = Math.random() * (maxX - minX) + minX;
       const y = Math.random() * (maxY - minY) + minY;
       const angle = (Math.random() - 0.5) * 0.8;
 
-      // Tamanho aleatório +/- 20%
-      const scale = 0.8 + Math.random() * 0.4;
-      const papelWidth = papelWidthBase * scale;
-      const papelHeight = papelHeightBase * scale;
+      const widthVar = papelWidthBase * (0.8 + Math.random() * 0.4);
+      const heightVar = papelHeightBase * (0.8 + Math.random() * 0.4);
 
-      let papel = Bodies.rectangle(x, y, papelWidth, papelHeight, {
+      let papel = Bodies.rectangle(x, y, widthVar, heightVar, {
         restitution: 0.1,
-        friction: 0.3,
+        friction: 0.8,
         angle: angle,
         render: {
-          fillStyle: '#fff',
-          strokeStyle: '#ff6f91',
+          fillStyle: '#ffffff', // branco
+          strokeStyle: '#ff3366',
           lineWidth: 2
-        }
+        },
+        label: `papel-${indiceFrase}`,
+        customIndex: indiceFrase
       });
-      papel.customIndex = indiceFrase;
 
-      papeis.push(papel);
       Composite.add(world, papel);
+      papeis.push(papel);
     }
 
-    // Limpar papeis atuais do mundo e array
-    for (const p of papeis) {
-      Composite.remove(world, p);
+    // Carregar frases sorteadas do localStorage
+    const dadosSalvos = localStorage.getItem('frasesSorteadas');
+    if (dadosSalvos) {
+      frasesSorteadas = JSON.parse(dadosSalvos);
+      indicesRestantes = indicesRestantes.filter(i => !frasesSorteadas.includes(i));
     }
-    papeis.length = 0;
 
-    // Recriar papeis restantes ao carregar a página
-    indicesRestantes.forEach(indiceFrase => {
-      criarPapel(indiceFrase);
-    });
+    // Criar papeis iniciais
+    function criarPapelComY(indiceFrase, y) {
+  const x = Math.random() * (maxX - minX) + minX;
+  const angle = (Math.random() - 0.5) * 0.8;
 
-    // Detectar clique no papel
-  const fraseAberta = document.getElementById('fraseAberta');
+  const widthVar = papelWidthBase * (0.8 + Math.random() * 0.4);
+  const heightVar = papelHeightBase * (0.8 + Math.random() * 0.4);
+
+  let papel = Bodies.rectangle(x, y, widthVar, heightVar, {
+    restitution: 0.1,
+    friction: 0.5,  // um pouco mais de atrito
+    angle: angle,
+    render: {
+      fillStyle: '#ffffff',
+      strokeStyle: '#ff3366',
+      lineWidth: 2
+    },
+    label: `papel-${indiceFrase}`,
+    customIndex: indiceFrase
+  });
+
+  Composite.add(world, papel);
+  papeis.push(papel);
+}
+const quantidadeInicial = Math.min(150, indicesRestantes.length);
+
+for (let i = 0; i < quantidadeInicial; i++) {
+  const randIndex = Math.floor(Math.random() * indicesRestantes.length);
+  const indiceFrase = indicesRestantes.splice(randIndex, 1)[0];
+
+  const yMax = height - 300;
+  const yMin = height - 500;
+  const y = yMin + ((yMax - yMin) * (i / quantidadeInicial));
+
+  criarPapelComY(indiceFrase, y);
+}
+
+    const fraseAberta = document.getElementById('fraseAberta');
     const mouse = Mouse.create(canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
@@ -400,99 +640,34 @@
       }
     });
 
-    function abrirPapel(indicePapel) {
-      if (indicePapel < 0 || indicePapel >= papeis.length) return;
-
-      const papel = papeis[indicePapel];
-      const fraseIndex = papel.customIndex;
-
-      // Mostrar frase
-      fraseAbertaDiv.textContent = frases[fraseIndex];
-      fraseAbertaDiv.style.display = 'block';
-      
-      document.getElementById('btnMostrar').addEventListener('click', () => {
-  listaFrases.innerHTML = '';
-
-  if (indicesUsados.length === 0) {
-    listaFrases.innerHTML = '<li>Nenhuma frase sorteada ainda.</li>';
-  } else {
-    indicesUsados.forEach((i, index) => {  // <- veja que eu adicionei o `index`
-      const li = document.createElement('li');
-      li.textContent = `${index + 1}. ${frases[i]}`;  // numeração automática aqui
-      listaFrases.appendChild(li);
-    });
-  }
-
-  modalFundo.style.display = 'flex';
-});
-
-      // Remover do mundo e do array
-      Composite.remove(world, papel);
-      papeis.splice(indicePapel, 1);
-
-      // Atualizar arrays e salvar progresso
-      const idxNoRestante = indicesRestantes.indexOf(fraseIndex);
-      if (idxNoRestante >= 0) indicesRestantes.splice(idxNoRestante, 1);
-      indicesUsados.push(fraseIndex);
-
-      salvarProgresso();
-    }
-
-    function salvarProgresso() {
-      localStorage.setItem('indicesRestantes', JSON.stringify(indicesRestantes));
-      localStorage.setItem('indicesUsados', JSON.stringify(indicesUsados));
-    }
-
-    // Botão limpar progresso
+    // Botões limpar progresso e mostrar frases
     document.getElementById('btnLimpar').addEventListener('click', () => {
-      if (confirm('Tem certeza que quer limpar o progresso? Todas as frases serão resetadas.')) {
-        indicesRestantes = Array.from(Array(frases.length).keys());
-        indicesUsados = [];
-
-        // Limpar papeis atuais
-        for (const p of papeis) Composite.remove(world, p);
-        papeis.length = 0;
-
-        // Recriar papeis todos
-        indicesRestantes.forEach(indiceFrase => criarPapel(indiceFrase));
-
-        salvarProgresso();
-
-        fraseAbertaDiv.style.display = 'none';
+      if(confirm('Deseja realmente limpar o progresso? Isso não pode ser desfeito.')) {
+        localStorage.removeItem('frasesSorteadas');
+        location.reload();
       }
     });
 
-    // Modal frases sorteadas
     const modalFundo = document.getElementById('modalFundo');
+    const modalFechar = document.getElementById('modalFechar');
     const listaFrases = document.getElementById('listaFrases');
+
     document.getElementById('btnMostrar').addEventListener('click', () => {
-      listaFrases.innerHTML = '';
-
-      if (indicesUsados.length === 0) {
-        listaFrases.innerHTML = '<li>Nenhuma frase sorteada ainda.</li>';
+      if(frasesSorteadas.length === 0) {
+        listaFrases.textContent = 'Nenhuma frase sorteada ainda.';
       } else {
-        indicesUsados.forEach(i => {
-          const li = document.createElement('li');
-          li.textContent = frases[i];
-          listaFrases.appendChild(li);
-        });
+        const textos = frasesSorteadas.map(i => `- ${frases[i]}`).join('\n\n');
+        listaFrases.textContent = textos;
       }
-
       modalFundo.style.display = 'flex';
     });
 
-    document.getElementById('modalFechar').addEventListener('click', () => {
+    modalFechar.addEventListener('click', () => {
       modalFundo.style.display = 'none';
     });
 
-    // Fechar modal clicando fora do conteúdo
-    modalFundo.addEventListener('click', e => {
-      if (e.target === modalFundo) modalFundo.style.display = 'none';
-    });
-
-    // Atualizar engine sempre
-    Events.on(engine, 'afterUpdate', () => {
-      // Poderia colocar alguma animação extra aqui se quiser
+    modalFundo.addEventListener('click', (e) => {
+      if(e.target === modalFundo) modalFundo.style.display = 'none';
     });
 
   </script>
