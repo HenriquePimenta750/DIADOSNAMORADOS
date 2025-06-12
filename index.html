@@ -116,17 +116,14 @@
     }
 
     /* Botões, agora dentro do main, abaixo do pote */
-    #botoesControles {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      width: 100%;
-      max-width: 500px;
-      user-select: none;
-    }
+  #botoesControles button {
+  flex: none;        /* não expande para preencher */
+  width: auto;       /* largura mínima necessária */
+  padding: 20px 20px;/* ajuste o padding a gosto */
+}
     #botoesControles button {
       flex: 1;
-      padding: 10px 0;
+      padding: 10px 10px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -135,12 +132,7 @@
       font-size: 1rem;
       transition: background-color 0.3s ease;
     }
-    #btnLimpar {
-      background: #ff3366;
-    }
-    #btnLimpar:hover {
-      background: #e52a5b;
-    }
+
     #btnMostrar {
       background: #ff708d;
     }
@@ -246,8 +238,16 @@
     </div>
 
     <div id="textoContainer">
-      Feliz dia dos namoradosss!! eu fiquei em dúvida do que dar de presente, já que você é uma pessoa bemmm chatinha e indecisa. Por isso criei esse pote, dentro dele tem 365 motivos do porquê eu te amo. <br>Cada motivo está separado em um desses quadradinhos, que voce pode ir tirando. Se quiser ver os motivos que ja tirou é so clicar no botão "ver frases sorteadas"
-    </div>
+  <div style="text-align: center; font-size: 2rem; color: #ff3366; font-weight: bold;">
+    FELIZ DIA DOS NAMORADOS!!
+  </div>
+  <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;Eu quero que você saiba que eu te amo mais que infinito, sou feliz cada segundo do seu lado.
+   <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;Eu fiquei em dúvida do que dar de presente, já que você é uma pessoa bemmm chatinha e indecisa. Por isso tentei ser criativo e criei esse pote, dentro dele tem 365 motivos do porquê eu te amo.
+  <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;Cada motivo está separado em um desses quadradinhos, que você pode ir tirando(de preferência 1 por dia kkk).
+</div>
 
     <div id="poteContainer">
       <div id="canvas-container">
@@ -258,7 +258,6 @@
     </div>
 
     <div id="botoesControles">
-      <button id="btnLimpar">Limpar Progresso</button>
       <button id="btnMostrar">Ver Frases Sorteadas</button>
     </div>
   </div>
