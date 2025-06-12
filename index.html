@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pote com 365 Motivos</title>
+  <style>
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0; padding: 0;
+      background: #fff0f5;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+    section {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 0 10px;
+    }
+    header {
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-align: center;
+      color: #ff3366;
+      user-select: none;
+    }
+    #imagem img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+    #texto p {
+      font-size: 1.125rem;
+      line-height: 1.5;
+      text-align: center;
+      user-select: none;
+      margin: 0;
+    }
+    #canvas-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 5 / 7; /* Mantém proporção 500x700 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    canvas {
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      background: #fff;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+      display: block;
+    }
+    #fraseAberta {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff3366;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 1rem;
+      min-width: 200px;
+      text-align: center;
+      display: none;
+      z-index: 10;
+      user-select: none;
+      word-wrap: break-word;
+    }
+    #poteVisual {
+      position: absolute;
+      width: 68%; /* 340/500 */
+      height: 88.5%; /* 620/700 */
+      top: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid #ff708d;
+      border-top: none;
+      border-radius: 0 0 30px 30px;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    #botoes-container {
+      margin-top: 10px;
+      display: flex;
+      gap: 15px;
+      user-select: none;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      background-color: #ff3366;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      min-width: 140px;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #e0245e;
+    }
+
+    /* Modal */
+    #modalFundo {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      user-select: none;
+      padding: 10px;
+    }
+    #modalConteudo {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 30px;
+      max-width: 450px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+      text-align: center;
+      position: relative;
+    }
+    #modalConteudo h2 {
+      margin-top: 0;
+      color: #ff3366;
+      user-select: none;
+    }
+    #modalConteudo ul {
+      list-style: none;
+      padding-left: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+      text-align: left;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    #modalConteudo li {
+      margin-bottom: 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+    #modalFechar {
+  margin-top: 20px;
+  background-color: #ff3366;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#modalFechar:hover {
+  background-color: #e0245e;
+}
+    #modalFechar:hover {
+      color: #e0245e;
+    }
+
+    /* Media Queries para telas muito pequenas */
+    @media (max-width: 350px) {
+      header {
+        font-size: 1.5rem;
+      }
+      #texto p {
+        font-size: 1rem;
+      }
+      button {
+        min-width: 120px;
+        padding: 8px 14px;
+        font-size: 0.9rem;
+      }
+      #fraseAberta {
+        min-width: 150px;
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section id="titulo">
+    <header>365 Motivos para Te Amar</header>
+  </section>
+
+  <section id="imagem">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" alt="Imagem Romântica" />
+  </section>
+
+  <section id="texto">
+    <p>Este pote contém 365 motivos para te amar, um para cada dia do ano. Clique nos papeizinhos dentro do pote para descobrir um novo motivo!</p>
+  </section>
+
+  <section id="pote">
+    <div id="canvas-container">
+      <div id="fraseAberta"></div>
+      <div id="poteVisual"></div>
+      <canvas id="world" width="500" height="700"></canvas>
+    </div>
+    <div id="botoes-container">
+      <button id="btnLimpar">Limpar Progresso</button>
+      <button id="btnMostrar">Mostrar Frases Sorteadas</button>
+    </div>
+  </section>
+
+<div id="modalFundo">
+  <div id="modalConteudo">
+    <h2>Frases Sorteadas</h2>
+    <ul id="listaFrases"></ul>
+    <button id="modalFechar">Fechar</button>
+  </div>
+</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script>
+    const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
+
+    const frases = [
+  "Eu amo você porque você sempre me faz sorrir.",
+  "Eu amo você porque o seu abraço me traz paz.",
+  "Eu amo você porque você acredita em mim mesmo quando eu duvido.",
+  "Eu amo você porque sua risada é a música mais doce para mim.",
+  "Eu amo você porque você me inspira a ser uma pessoa melhor.",
+  
+  // ... até a frase 365
+  "Motivo #365: Eu amo você porque você existe na minha vida."
+];
+
+
+    const engine = Engine.create();
+    const world = engine.world;
+
+    // Ajustar dimensões base para canvas - fixa para a engine, mas CSS responsivo escala visualmente
+    const width = 500;
+    const height = 700;
+
+    const canvas = document.getElementById('world');
+    canvas.width = width;
+    canvas.height = height;
+
+    const render = Render.create({
+      canvas: canvas,
+      engine: engine,
+      options: { width, height, wireframes: false, background: '#ffffff' }
+    });
+
+    Render.run(render);
+    const runner = Runner.create();
+    Runner.run(runner, engine);
+
+    // Estrutura física do pote
+    const poteEsquerda = Bodies.rectangle(width/2 - 170, height/2 + 50, 30, 700, {
+      isStatic: true,
+      render: { visible: false }
+    });
+
+    const poteDireita = Bodies.rectangle(width/2 + 170, height/2 + 50, 30, 700, {
+      isStatic: true,
+      render: { visible: false }
+    });
+
+    const poteFundo = Bodies.rectangle(width/2, height - 40, 320, 50, {
+      isStatic: true,
+      render: { visible: false }
+    });
+
+    const poteTopo = Bodies.rectangle(width/2, 35, 320, 10, {
+      isStatic: true,
+      render: { visible: false }
+    });
+
+    Composite.add(world, [poteEsquerda, poteDireita, poteFundo, poteTopo]);
+
+    // Criar papeis
+    const papelWidthBase = 50;
+    const papelHeightBase = 25;
+    const minX = width/2 - 140;
+    const maxX = width/2 + 140;
+    const minY = height - 250;
+    const maxY = height - 100;
+
+    const papeis = [];
+    let indicesRestantes = [];
+    let indicesUsados = [];
+
+    // Carregar progresso do localStorage
+    const salvoIndicesRestantes = localStorage.getItem('indicesRestantes');
+    const salvoIndicesUsados = localStorage.getItem('indicesUsados');
+
+    if (salvoIndicesRestantes && salvoIndicesUsados) {
+      indicesRestantes = JSON.parse(salvoIndicesRestantes);
+      indicesUsados = JSON.parse(salvoIndicesUsados);
+    } else {
+      indicesRestantes = Array.from(Array(frases.length).keys());
+      indicesUsados = [];
+    }
+
+    function criarPapel(indiceFrase) {
+      const x = Math.random() * (maxX - minX) + minX;
+      const y = Math.random() * (maxY - minY) + minY;
+      const angle = (Math.random() - 0.5) * 0.8;
+
+      // Tamanho aleatório +/- 20%
+      const scale = 0.8 + Math.random() * 0.4;
+      const papelWidth = papelWidthBase * scale;
+      const papelHeight = papelHeightBase * scale;
+
+      let papel = Bodies.rectangle(x, y, papelWidth, papelHeight, {
+        restitution: 0.1,
+        friction: 0.3,
+        angle: angle,
+        render: {
+          fillStyle: '#fff',
+          strokeStyle: '#ff6f91',
+          lineWidth: 2
+        }
+      });
+      papel.customIndex = indiceFrase;
+
+      papeis.push(papel);
+      Composite.add(world, papel);
+    }
+
+    // Limpar papeis atuais do mundo e array
+    for (const p of papeis) {
+      Composite.remove(world, p);
+    }
+    papeis.length = 0;
+
+    // Recriar papeis restantes ao carregar a página
+    indicesRestantes.forEach(indiceFrase => {
+      criarPapel(indiceFrase);
+    });
+
+    // Detectar clique no papel
+  const fraseAberta = document.getElementById('fraseAberta');
+    const mouse = Mouse.create(canvas);
+    const mouseConstraint = MouseConstraint.create(engine, {
+      mouse: mouse,
+      constraint: { stiffness: 0.2, render: { visible: false } }
+    });
+
+    Composite.add(world, mouseConstraint);
+
+    Events.on(mouseConstraint, 'mousedown', function(event) {
+      const mousePos = event.mouse.position;
+
+      for(let i = papeis.length - 1; i >= 0; i--) {
+        const papel = papeis[i];
+        if (Matter.Bounds.contains(papel.bounds, mousePos) && Matter.Vertices.contains(papel.vertices, mousePos)) {
+          const indiceFrase = papel.customIndex;
+          fraseAberta.textContent = frases[indiceFrase];
+          fraseAberta.style.display = 'block';
+
+          Composite.remove(world, papel);
+          papeis.splice(i,1);
+
+          frasesSorteadas.push(indiceFrase);
+          localStorage.setItem('frasesSorteadas', JSON.stringify(frasesSorteadas));
+
+          if (indicesRestantes.length > 0) {
+            const randIndex = Math.floor(Math.random() * indicesRestantes.length);
+            const novoIndice = indicesRestantes.splice(randIndex, 1)[0];
+            criarPapel(novoIndice);
+          }
+
+          setTimeout(() => {
+            fraseAberta.style.display = 'none';
+          }, 3500);
+
+          break;
+        }
+      }
+    });
+
+    function abrirPapel(indicePapel) {
+      if (indicePapel < 0 || indicePapel >= papeis.length) return;
+
+      const papel = papeis[indicePapel];
+      const fraseIndex = papel.customIndex;
+
+      // Mostrar frase
+      fraseAbertaDiv.textContent = frases[fraseIndex];
+      fraseAbertaDiv.style.display = 'block';
+      
+      document.getElementById('btnMostrar').addEventListener('click', () => {
+  listaFrases.innerHTML = '';
+
+  if (indicesUsados.length === 0) {
+    listaFrases.innerHTML = '<li>Nenhuma frase sorteada ainda.</li>';
+  } else {
+    indicesUsados.forEach((i, index) => {  // <- veja que eu adicionei o `index`
+      const li = document.createElement('li');
+      li.textContent = `${index + 1}. ${frases[i]}`;  // numeração automática aqui
+      listaFrases.appendChild(li);
+    });
+  }
+
+  modalFundo.style.display = 'flex';
+});
+
+      // Remover do mundo e do array
+      Composite.remove(world, papel);
+      papeis.splice(indicePapel, 1);
+
+      // Atualizar arrays e salvar progresso
+      const idxNoRestante = indicesRestantes.indexOf(fraseIndex);
+      if (idxNoRestante >= 0) indicesRestantes.splice(idxNoRestante, 1);
+      indicesUsados.push(fraseIndex);
+
+      salvarProgresso();
+    }
+
+    function salvarProgresso() {
+      localStorage.setItem('indicesRestantes', JSON.stringify(indicesRestantes));
+      localStorage.setItem('indicesUsados', JSON.stringify(indicesUsados));
+    }
+
+    // Botão limpar progresso
+    document.getElementById('btnLimpar').addEventListener('click', () => {
+      if (confirm('Tem certeza que quer limpar o progresso? Todas as frases serão resetadas.')) {
+        indicesRestantes = Array.from(Array(frases.length).keys());
+        indicesUsados = [];
+
+        // Limpar papeis atuais
+        for (const p of papeis) Composite.remove(world, p);
+        papeis.length = 0;
+
+        // Recriar papeis todos
+        indicesRestantes.forEach(indiceFrase => criarPapel(indiceFrase));
+
+        salvarProgresso();
+
+        fraseAbertaDiv.style.display = 'none';
+      }
+    });
+
+    // Modal frases sorteadas
+    const modalFundo = document.getElementById('modalFundo');
+    const listaFrases = document.getElementById('listaFrases');
+    document.getElementById('btnMostrar').addEventListener('click', () => {
+      listaFrases.innerHTML = '';
+
+      if (indicesUsados.length === 0) {
+        listaFrases.innerHTML = '<li>Nenhuma frase sorteada ainda.</li>';
+      } else {
+        indicesUsados.forEach(i => {
+          const li = document.createElement('li');
+          li.textContent = frases[i];
+          listaFrases.appendChild(li);
+        });
+      }
+
+      modalFundo.style.display = 'flex';
+    });
+
+    document.getElementById('modalFechar').addEventListener('click', () => {
+      modalFundo.style.display = 'none';
+    });
+
+    // Fechar modal clicando fora do conteúdo
+    modalFundo.addEventListener('click', e => {
+      if (e.target === modalFundo) modalFundo.style.display = 'none';
+    });
+
+    // Atualizar engine sempre
+    Events.on(engine, 'afterUpdate', () => {
+      // Poderia colocar alguma animação extra aqui se quiser
+    });
+
+  </script>
+</body>
+</html>
